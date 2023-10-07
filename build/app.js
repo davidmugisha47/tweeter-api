@@ -8,9 +8,11 @@ const morgan_1 = __importDefault(require("morgan"));
 const models_1 = require("./models");
 const tweetRoutes_1 = __importDefault(require("./routes/tweetRoutes"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
+const cors = require('cors');
 const app = (0, express_1.default)();
 app.use((0, morgan_1.default)('dev'));
 app.use(express_1.default.json());
+app.use(cors());
 app.use(express_1.default.urlencoded({ extended: true }));
 // routes
 app.use('/api/tweeter', tweetRoutes_1.default);
