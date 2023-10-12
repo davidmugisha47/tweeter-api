@@ -2,6 +2,7 @@ import { Sequelize } from "sequelize";
 import { AssociateUserTweet, TweetFactory } from "./tweet";
 import { UserFactory } from "./user";
 
+
 const dbName = 'tweeterDB';
 const username = 'root';
 const password = 'davidmugisha';

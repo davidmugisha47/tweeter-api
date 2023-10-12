@@ -51,4 +51,4 @@ export function TweetFactory(sequelize: Sequelize) {
 export function AssociateUserTweet() {
     User.hasMany(Tweet, { foreignKey: 'userId' });
     Tweet.belongsTo(User, { foreignKey: 'userId' });
-}
+  }
