@@ -55,3 +55,13 @@ export const getUser: RequestHandler = async (req, res, next) => {
         res.status(404).send({});
     }
 }
+
+export const currentLogin: RequestHandler = async (req, res, next) => {
+    let user: User | null = await verifyUser(req);
+  
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(401).send();
+   }
+  };
