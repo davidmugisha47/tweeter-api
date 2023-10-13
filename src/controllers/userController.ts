@@ -24,16 +24,13 @@ export const createUser: RequestHandler = async (req, res, next) => {
 }
 
 export const loginUser: RequestHandler = async (req, res, next) => {
-    // Look up user by their username
     let existingUser: User | null = await User.findOne({ 
         where: { username: req.body.username }
     });
 
-    // If user exists, check that password matches
     if (existingUser) {
         let passwordsMatch = await comparePasswords(req.body.password, existingUser.password);
-        
-        // If passwords match, create a JWT
+
         if (passwordsMatch) {
             let token = await signUserToken(existingUser);
             res.status(200).json({ token });
@@ -48,15 +45,13 @@ export const loginUser: RequestHandler = async (req, res, next) => {
 }
 
 export const getUser: RequestHandler = async (req, res, next) => {
-    let user: User | null = await verifyUser(req);
+    let userId = req.params.userId;
+    let user = await User.findByPk(userId);
 
     if (user) {
-        let { username } = user;
-        res.status(200).json({
-            username
-        });
+        res.status(200).json(user);
     }
     else {
-        res.status(401).send();
+        res.status(404).send({});
     }
 }

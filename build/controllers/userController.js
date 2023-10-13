@@ -25,14 +25,11 @@ const createUser = async (req, res, next) => {
 };
 exports.createUser = createUser;
 const loginUser = async (req, res, next) => {
-    // Look up user by their username
     let existingUser = await user_1.User.findOne({
         where: { username: req.body.username }
     });
-    // If user exists, check that password matches
     if (existingUser) {
         let passwordsMatch = await (0, auth_1.comparePasswords)(req.body.password, existingUser.password);
-        // If passwords match, create a JWT
         if (passwordsMatch) {
             let token = await (0, auth_1.signUserToken)(existingUser);
             res.status(200).json({ token });
@@ -47,15 +44,13 @@ const loginUser = async (req, res, next) => {
 };
 exports.loginUser = loginUser;
 const getUser = async (req, res, next) => {
-    let user = await (0, auth_1.verifyUser)(req);
+    let userId = req.params.userId;
+    let user = await user_1.User.findByPk(userId);
     if (user) {
-        let { username } = user;
-        res.status(200).json({
-            username
-        });
+        res.status(200).json(user);
     }
     else {
-        res.status(401).send();
+        res.status(404).send({});
     }
 };
 exports.getUser = getUser;

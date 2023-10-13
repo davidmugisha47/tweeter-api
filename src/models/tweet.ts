@@ -21,7 +21,6 @@ export function TweetFactory(sequelize: Sequelize) {
         title: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
         },
         image: {
             type: DataTypes.STRING,

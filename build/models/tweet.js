@@ -17,7 +17,6 @@ function TweetFactory(sequelize) {
         title: {
             type: sequelize_1.DataTypes.STRING,
             allowNull: false,
-            unique: true
         },
         image: {
             type: sequelize_1.DataTypes.STRING,
