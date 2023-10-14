@@ -53,7 +53,11 @@ const updateTweet = async (req, res, next) => {
 };
 exports.updateTweet = updateTweet;
 const deleteTweet = async (req, res, next) => {
-    let tweetId = req.params.tweetId;
+    let user = await (0, auth_1.verifyUser)(req);
+    if (!user) {
+        return res.status(403).send();
+    }
+    let tweetId = req.params.id;
     let found = await tweet_1.Tweet.findByPk(tweetId);
     if (found) {
         await tweet_1.Tweet.destroy({
