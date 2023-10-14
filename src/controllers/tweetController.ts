@@ -41,12 +41,6 @@ export const getTweet: RequestHandler = async (req, res, next) => {
 
 export const updateTweet: RequestHandler = async (req, res, next) => {
 
-    let user: User | null = await verifyUser(req);
-
-    if (!user) {
-        return res.status(403).send();
-    }
-
     let tweetId = req.params.id;
     let newTweet: Tweet = req.body;
     
@@ -66,13 +60,7 @@ export const updateTweet: RequestHandler = async (req, res, next) => {
 
 export const deleteTweet: RequestHandler = async (req, res, next) => {
 
-    let user: User | null = await verifyUser(req);
-
-    if (!user) {
-        return res.status(403).send();
-    }
-
-    let tweetId = req.params.id;
+    let tweetId = req.params.tweetId;
     let found = await Tweet.findByPk(tweetId);
     
     if (found) {
@@ -84,4 +72,14 @@ export const deleteTweet: RequestHandler = async (req, res, next) => {
     else {
         res.status(404).json();
     }
+}
+
+export const getTweetsByUserId: RequestHandler  = async (req, res, next) => {
+    let userId = req.params.id;
+    let tweets = await Tweet.findAll({
+        include: { model: User },
+        where: { userId: userId} 
+    });
+
+    res.status(200).json(tweets);
 }

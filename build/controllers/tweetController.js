@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteTweet = exports.updateTweet = exports.getTweet = exports.createTweet = exports.getAllTweets = void 0;
+exports.getTweetsByUserId = exports.deleteTweet = exports.updateTweet = exports.getTweet = exports.createTweet = exports.getAllTweets = void 0;
 const tweet_1 = require("../models/tweet");
+const user_1 = require("../models/user");
 const auth_1 = require("../services/auth");
 const getAllTweets = async (req, res, next) => {
     let tweets = await tweet_1.Tweet.findAll();
@@ -36,10 +37,6 @@ const getTweet = async (req, res, next) => {
 };
 exports.getTweet = getTweet;
 const updateTweet = async (req, res, next) => {
-    let user = await (0, auth_1.verifyUser)(req);
-    if (!user) {
-        return res.status(403).send();
-    }
     let tweetId = req.params.id;
     let newTweet = req.body;
     let foundTweet = await tweet_1.Tweet.findByPk(tweetId);
@@ -56,11 +53,7 @@ const updateTweet = async (req, res, next) => {
 };
 exports.updateTweet = updateTweet;
 const deleteTweet = async (req, res, next) => {
-    let user = await (0, auth_1.verifyUser)(req);
-    if (!user) {
-        return res.status(403).send();
-    }
-    let tweetId = req.params.id;
+    let tweetId = req.params.tweetId;
     let found = await tweet_1.Tweet.findByPk(tweetId);
     if (found) {
         await tweet_1.Tweet.destroy({
@@ -73,3 +66,12 @@ const deleteTweet = async (req, res, next) => {
     }
 };
 exports.deleteTweet = deleteTweet;
+const getTweetsByUserId = async (req, res, next) => {
+    let userId = req.params.id;
+    let tweets = await tweet_1.Tweet.findAll({
+        include: { model: user_1.User },
+        where: { userId: userId }
+    });
+    res.status(200).json(tweets);
+};
+exports.getTweetsByUserId = getTweetsByUserId;
